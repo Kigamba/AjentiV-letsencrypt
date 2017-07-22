@@ -166,7 +166,6 @@ server {
         file = open(self.crontab_dir + '/' + self.settings.cronfile, 'w')
         template = "0 0 1 * * " + self.pwd + 'libs/letsencrypt.sh/letsencrypt.sh -c'
         file.write(template)
-        self.context.notify('info', 'Cron job error')
         file.close()
 
     def remove_cron(self):
