@@ -196,7 +196,7 @@ server {
                 return False
 
     def request_certificates(self):
-        params = [ "sudo " + self.pwd + 'libs/letsencrypt.sh/letsencrypt.sh', '-c']
+        params = [+ self.pwd + 'libs/letsencrypt.sh/letsencrypt.sh -c']#[+ self.pwd + 'libs/letsencrypt.sh/letsencrypt.sh', '-c']
         self.log(params[0])
         if self.find('renewal').value:
             params.append('--force')
