@@ -204,10 +204,10 @@ server {
             p = subprocess.Popen(params, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             out, err = p.communicate()
         except Exception as ex:
-            self.log(type(ex))
-            self.log(ex.message)
-            self.log(ex.args)
-            self.log(ex)
+            self.log( str(type(ex)) )
+            self.log( str(ex.message) )
+            self.log( str(ex.args) )
+            self.log( str(ex) )
 
             self.context.notify('info', 'An error occured! Please check the logs')
             return
