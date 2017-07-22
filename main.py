@@ -210,7 +210,6 @@ server {
             self.log( str(ex.args) )
             self.log( str(ex) )
             self.log( traceback.print_exc() )
-
             self.context.notify('info', 'An error occured! Please check the logs')
             return
 
