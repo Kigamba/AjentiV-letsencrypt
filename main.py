@@ -3,6 +3,7 @@ import grp
 import os
 import subprocess
 import json
+import traceback
 
 from string import Template
 from shutil import copyfile
@@ -61,7 +62,7 @@ class LetsEncryptPlugin (SectionPlugin):
 
     def log(self, tolog):
         file = open(self.pwd+ '/' + "log.txt" , 'a')
-        file.write(tolog)
+        file.write('\n' + tolog)
         file.close()
 
     def init(self):
@@ -208,6 +209,7 @@ server {
             self.log( str(ex.message) )
             self.log( str(ex.args) )
             self.log( str(ex) )
+            self.log( traceback.print_exc() )
 
             self.context.notify('info', 'An error occured! Please check the logs')
             return
