@@ -62,7 +62,7 @@ class LetsEncryptPlugin (SectionPlugin):
 
     def log(self, tolog):
         file = open(self.pwd+ '/' + "log.txt" , 'a')
-        file.write('\n' + tolog)
+        file.write('\n' + str(tolog) )
         file.close()
 
     def init(self):
