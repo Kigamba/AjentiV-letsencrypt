@@ -200,8 +200,17 @@ server {
         if self.find('renewal').value:
             params.append('--force')
 
-        p = subprocess.Popen(params, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = p.communicate()
+        try:
+            p = subprocess.Popen(params, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            out, err = p.communicate()
+        except Exception as ex:
+            self.log(type(ex))
+            self.log(ex.message)
+            self.log(ex.args)
+            self.log(ex)
+
+            self.context.notify('info', 'An error occured! Please check the logs')
+            return
 
         if out:
             self.context.notify('info', 'OUT: ' + out)
