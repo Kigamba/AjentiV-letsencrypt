@@ -59,6 +59,11 @@ class LetsEncryptPlugin (SectionPlugin):
 
     has_domains = False
 
+    def log(self, tolog):
+        file = open(self.pwd+ '/' + "log.txt" , 'a')
+        file.write(tolog)
+        file.close()
+
     def init(self):
         self.title = 'LetsEncrypt'  # those are not class attributes and can be only set in or after init()
         self.icon = 'lock'
@@ -200,6 +205,7 @@ server {
         if out:
             self.context.notify('info', 'OUT: ' + out)
         if err:
+            self.log(err + '')
             self.context.notify('info', 'ERR: ' + err)
 
     def save(self):
