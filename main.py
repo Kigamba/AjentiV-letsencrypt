@@ -17,8 +17,9 @@ from ajenti.util import platform_select
 from pprint import pprint
 
 
-def log(self, tolog):
-    file = open(self.pwd + '/' + "log.txt", 'a')
+currentFolderPath = os.path.join(os.path.dirname(os.path.realpath(__file__)), '')
+def log(tolog):
+    file = open(currentFolderPath + '/' + "log.txt", 'a')
     file.write('\n' + str(tolog))
     file.close()
 
