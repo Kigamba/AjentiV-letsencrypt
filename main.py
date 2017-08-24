@@ -79,7 +79,7 @@ class LetsEncryptPlugin (SectionPlugin):
         self.settings = Settings()
 
         self.binder = Binder(self.settings, self)
-    	self.binder.populate()
+        self.binder.populate()
 
     def on_page_load(self):
         filepath = self.settings.basedir + self.settings.domainfile
@@ -102,28 +102,28 @@ class LetsEncryptPlugin (SectionPlugin):
             self.has_domains = True
         else:
             self.context.notify('error', 'Domain file write error')
-    	file.close()
+        file.close()
 
     def read_domain_file(self):
         filepath = self.settings.basedir + self.settings.domainfile
-    	if not open(filepath):
+        if not open(filepath):
             self.context.notify('error', 'Domain file could not be read')
 
         file = open(filepath)
-    	with file as f:
+        with file as f:
             lines = f.readlines()
         return lines
 
     def create_folders(self):
-    	uid = pwd.getpwnam("www-data").pw_uid
-    	gid = grp.getgrnam("www-data").gr_gid
+        uid = pwd.getpwnam("www-data").pw_uid
+        gid = grp.getgrnam("www-data").gr_gid
 
-    	if not os.path.exists(self.settings.basedir):
-        	os.makedirs(self.settings.basedir)
-    		os.chown(self.settings.basedir, uid, gid)
-    	if not os.path.exists(self.settings.wellknown):
-        	os.makedirs(self.settings.wellknown)
-    		os.chown(self.settings.wellknown, uid, gid)
+        if not os.path.exists(self.settings.basedir):
+            os.makedirs(self.settings.basedir)
+            os.chown(self.settings.basedir, uid, gid)
+        if not os.path.exists(self.settings.wellknown):
+            os.makedirs(self.settings.wellknown)
+            os.chown(self.settings.wellknown, uid, gid)
 
     def create_custom_config(self):
         template = """
@@ -196,7 +196,7 @@ server {
                 return False
 
     def request_certificates(self):
-        params = [ self.pwd + 'libs/letsencrypt.sh/dehydrated.sh -c']
+        params = [ self.pwd + 'libs/letsencrypt.sh/dehydrated.sh', '-c']
         self.log(params[0])
         if self.find('renewal').value:
             params.append('--force')
@@ -204,7 +204,7 @@ server {
         try:
             p = subprocess.Popen(params, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             out, err = p.communicate()
-        except Exception as ex:
+        except NameError as ex:
             self.log( str(type(ex)) )
             self.log( str(ex.message) )
             self.log( str(ex.args) )
@@ -221,7 +221,7 @@ server {
 
     def save(self):
         self.binder.update()
-    	self.binder.populate()
+        self.binder.populate()
         self.create_folders()
         self.write_domain_file()
 
