@@ -45,7 +45,7 @@ class Settings (object):
 class LetsEncryptPlugin (SectionPlugin):
 
     pwd = os.path.join(os.path.dirname(os.path.realpath(__file__)), '')
-    log("PWD FILE PATH :: " . str(pwd) )
+    log("PWD FILE PATH :: " + str(pwd) )
 
     nginx_config_dir = platform_select(
         debian='/etc/nginx.custom.d',
@@ -227,7 +227,7 @@ server {
     def request_certificates(self):
         params = [ self.pwd + 'libs/letsencrypt.sh/dehydrated.sh', '-c']
         log("Request certificates with params -> [" + " ".join(params)  + "]")
-        '''self.log(params[0]) '''
+        """ self.log(params[0]) """
         if self.find('renewal').value:
             log("Renewal TRUE!! Force renewal if already exists")
             params.append('--force')
@@ -284,3 +284,9 @@ server {
         self.save()
         log("Requesting certificates onClick()")
         self.request_certificates()
+
+    def register_user(self):
+        ''' Register your email here'''
+        email = "afriquekenya@gmail.com"
+        account_key = ""
+
