@@ -16,6 +16,9 @@ from ajenti.util import platform_select
 
 from pprint import pprint
 
+from os import listdir
+
+from os.path import isfile
 
 currentFolderPath = os.path.join(os.path.dirname(os.path.realpath(__file__)), '')
 def log(tolog):
@@ -26,21 +29,21 @@ def log(tolog):
 class Settings (object):
    def __init__(self):
       self.basedir = platform_select(
-          debian='/etc/letsencrypt.sh/',
-          centos='/etc/letsencrypt.sh/',
-          mageia='/etc/letsencrypt.sh/',
-          freebsd='/usr/local/etc/letsencrypt.sh/',
-          arch='/etc/letsencrypt.sh/',
-          osx='/opt/local/etc/letsencrypt.sh/',
+          debian='/etc/dehydrated/',
+          centos='/etc/dehydrated/',
+          mageia='/etc/dehydrated/',
+          freebsd='/usr/local/etc/dehydrated/',
+          arch='/etc/dehydrated/',
+          osx='/opt/local/etc/dehydrated/',
       )
 
-      self.wellknown = '/var/www/letsencrypt.sh/'
+      self.wellknown = '/var/www/dehydrated/'
       self.domains = 'example.com sub.example.com'
       self.cronjob = False
       self.cronfile = 'letsencrypt'
       self.results = ''
       self.domainfile = 'domains.txt'
-      self.nginx_config = '00_letsencrypt.conf'
+      self.nginx_config = '00_dehydrated.conf'
 
 @plugin
 class LetsEncryptPlugin (SectionPlugin):
@@ -53,6 +56,15 @@ class LetsEncryptPlugin (SectionPlugin):
         centos='/etc/nginx.custom.d',
         mageia='/etc/nginx.custom.d',
         freebsd='/usr/local/etc/nginx.custom.d',
+        arch='/etc/nginx/sites-available',
+        osx='/opt/local/etc/nginx',
+    )
+
+    nginx_hosts_config_dir = platform_select(
+        debian='/etc/nginx/conf.d',
+        centos='/etc/nginx/conf.d',
+        mageia='/etc/nginx/conf.d',
+        freebsd='/usr/local/etc/nginx/conf.d',
         arch='/etc/nginx/sites-available',
         osx='/opt/local/etc/nginx',
     )
@@ -192,7 +204,7 @@ server {
 
     def create_cron(self):
         file = open(self.crontab_dir + '/' + self.settings.cronfile, 'w')
-        template = "0 0 1 * * " + self.pwd + 'libs/letsencrypt.sh/letsencrypt.sh -c'
+        template = "0 0 1 * * " + self.pwd + 'libs/dehydrated/dehydrated.sh -c'
         file.write(template)
         log("Creating cron in file [" + (self.crontab_dir + "/" + self.settings.cronfile) + "] with Command [" + template + "]" )
         file.close()
@@ -226,7 +238,7 @@ server {
                 return False
 
     def request_certificates(self):
-        params = [ self.pwd + 'libs/letsencrypt.sh/dehydrated.sh', '-c']
+        params = [ self.pwd + 'libs/dehydrated/dehydrated.sh', '-c']
         log("Request certificates with params -> [" + " ".join(params)  + "]")
         """ self.log(params[0]) """
         if self.find('renewal').value:
@@ -284,10 +296,102 @@ server {
     def request_button(self):
         self.save()
         log("Requesting certificates onClick()")
+        self.backup_files_add_location_alias()
         self.request_certificates()
+        self.restore_backup_conf_files()
 
     def register_user(self):
         ''' Register your email here'''
-        email = "afriquekenya@gmail.com"
-        account_key = ""
+        params = [self.pwd + 'libs/dehydrated/dehydrated.sh', '--register', '--accept--terms']
+
+        try:
+            log("Creating a subprocess to perform the command!")
+            p = subprocess.Popen(params, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            out, err = p.communicate()
+        except NameError as ex:
+            log("Error Occurred trying to perform the Command")
+            log( str(type(ex)) )
+            log( str(ex.message) )
+            log( str(ex.args) )
+            log( str(ex) )
+            log( traceback.print_exc() )
+            self.context.notify('info', 'An error occured! Please check the logs')
+            return
+
+        if out:
+            self.context.notify('info', 'OUT: ' + out)
+        if err:
+            log(err + '')
+            self.context.notify('info', 'ERR: ' + err)
+
+    def backup_files_add_location_alias(self):
+        ''' Get a list of all files in the nginx/conf.d && make backups of them save the final filenames'''
+        self.original_files = []
+        count = 0
+        location_block = """
+    location $location {
+        alias $alias;
+    }
+        """
+        location_dict = {
+            'location': "/.well-known/acme-challenge",
+            'alias': self.settings.wellknown
+        }
+        src = Template(location_block)
+        for f in listdir(self.nginx_hosts_config_dir):
+            if isfile(self.nginx_hosts_config_dir + "/" + f):
+                self.original_files[count] = self.nginx_hosts_config_dir + "/" + f
+                self.create_backup_file(self.original_files[count], ".bkp")
+                self.add_location_alias(self.original_files[count], src.safe_substitute(location_dict))
+                count += 1
+            else:
+                log("[" + (self.nginx_hosts_config_dir + "/" + f) + "] is not a file")
+
+    def create_backup_file(self, original_file, suffix):
+        file = open(original_file)
+        with file as f:
+            lines = f.readlines()
+        file.close()
+        file = open(original_file + suffix, 'w')
+        file.write("\n".join(lines))
+        file.close()
+        return True
+
+    def add_location_alias(self, original_file, location_block):
+        file = open(original_file)
+        last_closing_braket = 0
+        counter = 0
+
+        with file as f:
+            lines = f.readline
+        file.close()
+
+        for line in lines:
+            if line.find("}") > 0:
+                last_closing_braket = counter
+            counter += 1
+        lines.insert(location_block, last_closing_braket - 1)
+        file = open(original_file, 'w')
+        file.write("\n".join(lines))
+        file.close()
+        return True
+
+    def read_file(self, file_name):
+        file = open(file_name)
+        with file as f:
+            lines = f.readline
+        file.close()
+        return "\n".join(lines)
+
+
+    def restore_backup_conf_files(self):
+        for backup_file in self.original_files:
+            file_contents = self.read_file(backup_file)
+            file = open(backup_file.replace(".bkp", ""), 'w')
+            file.write(file_contents)
+            file.close()
+        log("Finished Restoring the backed up conf files!")
+
+
+
 
