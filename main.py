@@ -340,7 +340,7 @@ server {
         src = Template(location_block)
         for f in listdir(self.nginx_hosts_config_dir):
             if isfile(self.nginx_hosts_config_dir + "/" + f):
-                self.original_files[count] = self.nginx_hosts_config_dir + "/" + f
+                self.original_files.append(self.nginx_hosts_config_dir + "/" + f)
                 self.create_backup_file(self.original_files[count], ".bkp")
                 self.add_location_alias(self.original_files[count], src.safe_substitute(location_dict))
                 count += 1
@@ -363,10 +363,12 @@ server {
         counter = 0
 
         with file as f:
-            lines = f.readline
+            lines = f.readlines()
         file.close()
+        count = len(lines)
 
-        for line in lines:
+        while counter < count:
+            line = lines[counter]
             if line.find("}") > 0:
                 last_closing_braket = counter
             counter += 1
