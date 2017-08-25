@@ -372,7 +372,7 @@ server {
             if line.find("}") > 0:
                 last_closing_braket = counter
             counter += 1
-        lines.insert(location_block, last_closing_braket - 1)
+        lines.insert(last_closing_braket - 1, location_block)
         file = open(original_file, 'w')
         file.write("\n".join(lines))
         file.close()
