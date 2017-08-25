@@ -306,7 +306,7 @@ server {
 
     def register_user(self):
         ''' Register your email here'''
-        params = ["sudo " + self.pwd + 'libs/dehydrated/dehydrated.sh', '--register', '--accept--terms']
+        params = ["sudo", self.pwd + 'libs/dehydrated/dehydrated.sh', '--register', '--accept--terms']
 
         try:
             log("Creating a subprocess to perform the command!")
