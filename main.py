@@ -133,7 +133,7 @@ class LetsEncryptPlugin (SectionPlugin):
         file = open(filepath)
         with file as f:
             lines = f.readlines()
-        log("Domain file read :: ****\n" + "\n" .join(lines) + "\n****\n")
+        log("Domain file read :: ****\n" + ("\n" .join(lines)) + "\n****\n")
         return lines
 
     def create_folders(self):
@@ -386,7 +386,7 @@ server {
     def read_file(self, file_name):
         file = open(file_name)
         with file as f:
-            lines = f.readline
+            lines = f.readlines()
         file.close()
         return "\n".join(lines)
 
