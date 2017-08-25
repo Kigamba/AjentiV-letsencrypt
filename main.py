@@ -238,7 +238,7 @@ server {
                 return False
 
     def request_certificates(self):
-        params = [ "sudo " + self.pwd + 'libs/dehydrated/dehydrated.sh', '-c']
+        params = [ "sudo ", self.pwd + 'libs/dehydrated/dehydrated.sh', '-c']
         log("Request certificates with params -> [" + " ".join(params)  + "]")
         """ self.log(params[0]) """
         if self.find('renewal').value:
@@ -307,6 +307,7 @@ server {
     def register_user(self):
         ''' Register your email here'''
         params = ["sudo", self.pwd + 'libs/dehydrated/dehydrated.sh', '--register', '--accept--terms']
+        log("REGISTER USER COMMAND PARAMS :: [" + (" ".join(params))+ "]")
 
         try:
             log("Creating a subprocess to perform the command!")
