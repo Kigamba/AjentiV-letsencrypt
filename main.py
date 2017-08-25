@@ -311,7 +311,7 @@ server {
 
         try:
             log("Creating a subprocess to perform the command!")
-            p = subprocess.Popen(params, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            p = subprocess.Popen(params, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             out, err = p.communicate()
         except NameError as ex:
             log("Error Occurred trying to perform the Command")

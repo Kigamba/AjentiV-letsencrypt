@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a33f2501-e813-49d6-a577-b0ae630262eb" name="Default" comment="Fix unary operand type">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -19,7 +18,7 @@
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="243">
-              <caret line="313" column="52" lean-forward="false" selection-start-line="313" selection-start-column="52" selection-end-line="313" selection-end-column="52" />
+              <caret line="313" column="100" lean-forward="false" selection-start-line="313" selection-start-column="100" selection-end-line="313" selection-end-column="100" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -135,8 +134,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="751" />
-    <option name="y" value="135" />
+    <option name="x" value="72" />
+    <option name="y" value="171" />
     <option name="width" value="1161" />
     <option name="height" value="952" />
   </component>
@@ -479,7 +478,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="751" y="135" width="1161" height="952" extended-state="0" />
+    <frame x="72" y="171" width="1161" height="952" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23796548" sideWeight="0.46486485" order="2" side_tool="false" content_ui="combo" />
@@ -893,7 +892,7 @@
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="243">
-          <caret line="313" column="52" lean-forward="false" selection-start-line="313" selection-start-column="52" selection-end-line="313" selection-end-column="52" />
+          <caret line="313" column="100" lean-forward="false" selection-start-line="313" selection-start-column="100" selection-end-line="313" selection-end-column="100" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
