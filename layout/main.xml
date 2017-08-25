@@ -26,6 +26,7 @@
         <hc>
           <button text="{Save}" id="save" icon="ok"/>
           <button text="Request" id="request" icon="ok"/>
+            <button text="Register" id="register" icon="ok"/>
         </hc>
 
     </pad>

@@ -300,6 +300,10 @@ server {
         self.request_certificates()
         self.restore_backup_conf_files()
 
+    @on('register', 'click')
+    def register_click(self):
+        self.register_user()
+
     def register_user(self):
         ''' Register your email here'''
         params = [self.pwd + 'libs/dehydrated/dehydrated.sh', '--register', '--accept--terms']
